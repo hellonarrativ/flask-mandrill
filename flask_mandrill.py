@@ -1,5 +1,6 @@
 import requests
 import json
+import time
 
 class Mandrill(object):
     app = None
@@ -54,10 +55,19 @@ class Mandrill(object):
             raise ValueError(
                 'No from email was specified and no default was configured')
 
-
-        response = requests.post(endpoint,
+        email_sent = False
+        while not email_sent:
+            try:
+                response = requests.post(endpoint,
                                  data=json.dumps(data),
-                                 headers={'Content-Type': 'application/json'})
+                                 headers={'Content-Type': 'application/json'},
+                                 timeout=300)
+                email_sent = True
+            except Exception as e:
+                print('Error sending email with template ' + data['template_name'] )
+                print(e)
+                time.sleep(30)
+
         response.raise_for_status()
         return response
 
