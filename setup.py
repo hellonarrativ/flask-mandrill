@@ -36,7 +36,7 @@ from setuptools import setup
 
 setup(
     name='Flask-Mandrill',
-    version='0.3',
+    version='0.3.1',
     url='http://github.com/volker48/flask-mandrill',
     license='MIT',
     author='Marcus McCurdy',

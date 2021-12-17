@@ -56,6 +56,7 @@ class Mandrill(object):
                 'No from email was specified and no default was configured')
 
         email_sent = False
+        attemptedsend = 0
         while not email_sent:
             try:
                 response = requests.post(endpoint,
@@ -66,7 +67,12 @@ class Mandrill(object):
             except Exception as e:
                 print('Error sending email with template ' + data['template_name'] )
                 print(e)
-                time.sleep(30)
+                time.sleep(15)
+                if attemptedsend >= 4 :
+                    email_sent = True
+                    print('Failed to send email with template ' + data['template_name'] )
+                    break
+                attemptedsend+=1
 
         response.raise_for_status()
         return response
